@@ -1,0 +1,25 @@
+{
+  "name": "@inkly/sdk",
+  "version": "0.0.1",
+  "description": "A development kit for working with the InklyCMS",
+  "type": "module",
+  "module": "dist/index.js",
+  "main": "dist/index.cjs",
+  "repository": "https://github.com/InklyCMS/SDK.git",
+  "author": "Daryl <darylcecile@gmail.com>",
+  "license": "GPL-2.0-only",
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
+    "@types/node": "^18.11.15",
+    "tsup": "^6.5.0",
+    "typescript": "^4.9.4",
+    "vitest": "^0.25.8"
+  },
+  "dependencies": {
+    "undici": "^5.14.0"
+  }
+}
