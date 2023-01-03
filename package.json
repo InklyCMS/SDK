@@ -1,6 +1,6 @@
 {
   "name": "@inkly/sdk",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A development kit for working with the InklyCMS",
   "type": "module",
   "module": "dist/index.js",
