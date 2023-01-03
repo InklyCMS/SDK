@@ -1,10 +1,10 @@
 {
   "name": "@inkly/sdk",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A development kit for working with the InklyCMS",
   "type": "module",
   "module": "dist/index.js",
-  "main": "dist/index.cjs",
+  "main": "dist/index.js",
   "repository": "https://github.com/InklyCMS/SDK.git",
   "author": "Daryl <darylcecile@gmail.com>",
   "license": "GPL-2.0-only",
