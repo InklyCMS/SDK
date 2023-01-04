@@ -1,28 +1,39 @@
 {
   "name": "@inkly/sdk",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "A development kit for working with the InklyCMS",
   "type": "module",
   "module": "dist/index.js",
   "main": "dist/index.cjs",
-  "types": "dist/types.d.ts",
+  "sideEffects": false,
   "exports": {
     ".": {
-      "types": "dist/index.d.ts",
-      "import": "dist/index.js",
-      "require": "dist/index.cjs"
+      "types": "./dist/types.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     },
     "./helpers": {
-      "types": "dist/helpers/index.d.ts",
-      "import": "dist/helpers/index.js",
-      "require": "dist/helpers/index.cjs"
+      "types": "./dist/helpers/index.d.ts",
+      "import": "./dist/helpers/index.js",
+      "require": "./dist/helpers/index.cjs"
     },
     "./syntax": {
-      "types": "dist/syntax/index.d.ts",
-      "import": "dist/syntax/index.js",
-      "require": "dist/syntax/index.cjs"
+      "types": "./dist/syntax/index.d.ts",
+      "import": "./dist/syntax/index.js",
+      "require": "./dist/syntax/index.cjs"
     }
   },
+  "typesVersions": {
+    "*": {
+      "syntax": [
+        "./dist/syntax/index.d.ts"
+      ],
+      "helpers": [
+        "./dist/helpers/index.d.ts"
+      ]
+    }
+  },
+  "types": "dist/index.d.ts",
   "repository": "https://github.com/InklyCMS/SDK.git",
   "author": "Daryl <darylcecile@gmail.com>",
   "license": "GPL-2.0-only",
