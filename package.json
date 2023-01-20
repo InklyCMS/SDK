@@ -1,6 +1,6 @@
 {
   "name": "@inkly/sdk",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "A development kit for working with the InklyCMS",
   "type": "module",
   "module": "dist/index.js",
@@ -39,7 +39,8 @@
   "license": "GPL-2.0-only",
   "scripts": {
     "build": "tsup",
-    "test": "vitest"
+    "test": "vitest",
+    "prepublishOnly": "NODE_ENV=production tsup"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",
