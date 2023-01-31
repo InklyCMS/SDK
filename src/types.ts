@@ -11,10 +11,9 @@ export type InklyAuthLinkGenerationResponse = {
 }
 
 export type InklySession = {
-	isValid: boolean;
 	authToken: string;
 	appIdentifier: string;
-	expiry: Date;
+	expires: Date;
 	id: string;
 }
 
@@ -50,9 +49,43 @@ export type InklyAccessDetails = {
 	}>
 }
 
+export type InklySchemaField = {
+	label: string,
+	type: "shortText" | "longText" | "dateTime" | "number",
+	readonly?: boolean,
+	persistent?: boolean,
+	unique?: boolean,
+	size?: number,
+	calculateOnEvent?: Partial<{
+		onUpdate: string,
+		onCreate: string
+	}>
+}
+
+export type InklySchema<T = any> = {
+	id: string,
+	name: string,
+	reference: string,
+	description?: string,
+	shapeConfig: {
+		indexedFieldIDs: Array<string>,
+		fields: Record<string, InklySchemaField>
+	},
+	createdAt?: Date,
+	updatedAt?: Date,
+	projectId?: string,
+	contents: Array<T>
+}
+
+export type InklyBucket = {
+	id: string,
+	name: string,
+	reference: string
+}
+
 export interface IInklyFetcher<T> {
-    getAll():Promise<Array<T>>
-    getAllWhere(where:InklyWhere<T>):Promise<Array<T>>
+    getAll(limit:number):Promise<Array<T>>
+    getAllWhere(where:InklyWhere<T>, limit:number):Promise<Array<T>>
     getFirstWhere(where:InklyWhere<T>):Promise<T>
     getById(id:string):Promise<T>
 }

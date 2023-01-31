@@ -7,9 +7,10 @@ export default defineConfig({
     entry: [
         "src/index.ts",
         "src/helpers/index.ts",
+        "src/syntax/index.ts",
         "src/types.ts"
     ],
-    external: ["undici"],
+    external: [],
     outDir: "dist",
     sourcemap: process.env.NODE_ENV !== "production",
     format: ["esm", "cjs"],

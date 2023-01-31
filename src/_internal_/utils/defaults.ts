@@ -1,2 +1,2 @@
 
-export const INKLY_ENDPOINT = "connect.withinkly.io";
+export const INKLY_ENDPOINT = "connect.inkly.cc";

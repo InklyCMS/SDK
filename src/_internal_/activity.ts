@@ -1,5 +1,4 @@
 import type { InklySession } from "../types";
-import { fetch } from "undici";
 import { parseUrl } from "./utils/url";
 import { INKLY_ENDPOINT } from "./utils/defaults";
 import { InklyError } from "./error";
@@ -11,6 +10,7 @@ type SessionCreationOptions = {
 }
 
 type ProjectCreationOptions = {
+    name: string,
     authToken: string,
     endpoint?: string
 }
@@ -40,10 +40,11 @@ export class InklyActivity {
         
     }
 
-    static async createProject(options:ProjectCreationOptions):Promise<Partial<InklyProject>> {
+    static async createProject(options:ProjectCreationOptions):Promise<InklyProject> {
 
         const endpoint = parseUrl(options.endpoint ?? INKLY_ENDPOINT);
         endpoint.pathname = "/projects/create";
+        endpoint.searchParams.set('name', options.name);
 
         const headers = new Headers();
         headers.set("X-Inkly-Auth-Token", options.authToken);
@@ -59,7 +60,7 @@ export class InklyActivity {
                 reason: `Response was not understood. ${endpointResponse.bodyUsed ? '' : await endpointResponse.text()}`,
                 cause: e
             });
-        }) as Partial<InklyProject>;
+        }) as InklyProject;
 
         if ("id" in response) {
             return response;

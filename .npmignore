@@ -1,0 +1,8 @@
+!dist/
+.vscode/
+.idea/
+src/
+example/
+tsconfig.json
+tsup.config.ts
+.gitignore

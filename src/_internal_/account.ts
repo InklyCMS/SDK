@@ -1,7 +1,6 @@
 import type { IInklyAccount, InklySession } from "../types";
 import { INKLY_ENDPOINT } from "./utils/defaults";
 import { parseUrl } from "./utils/url";
-import { fetch } from "undici";
 import { InklyError } from "./error";
 
 type InklyAccountActionOptions = {

@@ -1,4 +1,3 @@
-import { fetch } from "undici";
 import { parseUrl } from "./utils/url";
 import { INKLY_ENDPOINT } from "./utils/defaults";
 import { InklyError } from "./error";
