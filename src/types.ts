@@ -67,6 +67,7 @@ export type InklySchema<T = any> = {
 	name: string,
 	reference: string,
 	description?: string,
+	versionNumber: number,
 	shapeConfig: {
 		indexedFieldIDs: Array<string>,
 		fields: Record<string, InklySchemaField>
@@ -75,6 +76,22 @@ export type InklySchema<T = any> = {
 	updatedAt?: Date,
 	projectId?: string,
 	contents: Array<T>
+}
+
+export type InklySchemaStat = {
+	reference: string,
+	versions: Array<{
+		id: string,
+		versionNumber: number,
+		updatedAt: Date,
+		contentCount: number,
+		shapeConfig: {
+			indexedFieldIDs: Array<string>,
+			fields: Record<string, InklySchemaField>
+		},
+	}>,
+	createdAt?: Date,
+	projectId?: string
 }
 
 export type InklyBucket = {

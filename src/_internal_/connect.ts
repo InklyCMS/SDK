@@ -3,7 +3,7 @@ import { InklyError } from "./error";
 import { op, serializeWhereCondition } from "./synt/condition";
 import { INKLY_ENDPOINT } from "./utils/defaults";
 import { parseUrl } from "./utils/url";
-import {InklyBucket, InklySchema} from "../types";
+import {InklyBucket, InklySchema, InklySchemaStat} from "../types";
 
 type ConnectionConstructorOptions = {
     endpoint?: string,
@@ -162,6 +162,58 @@ export class InklySchemaManager {
                 cause: e
             });
         }) as InklySchema;
+    }
+
+    async getStatsByRef(schemaRef:string){
+        const endpoint = parseUrl(this.options.endpoint ?? INKLY_ENDPOINT);
+        endpoint.pathname = "/projects/schema/stats";
+        endpoint.searchParams.set('projectSlug', this.options.projectSlug);
+        endpoint.searchParams.set('schemaRef', schemaRef);
+
+        const headers = new Headers();
+        headers.set("X-Inkly-Auth-Token", this.options.authToken);
+
+        const endpointResponse = await fetch(endpoint.href, {
+            headers,
+            method: 'GET'
+        });
+
+        if (!endpointResponse.ok) throw new InklyError("Failed to get schema stats", {
+            reason: await endpointResponse.text().catch(()=>null) ?? endpointResponse.statusText
+        });
+
+        return await endpointResponse.json().catch(async e => {
+            throw new InklyError("Failed to get schema stats", {
+                reason: `Response was not understood. ${endpointResponse.bodyUsed ? '' : await endpointResponse.text()}`,
+                cause: e
+            });
+        }) as InklySchemaStat;
+    }
+
+    async deleteAllByReference(schemaRef:string){
+        const endpoint = parseUrl(this.options.endpoint ?? INKLY_ENDPOINT);
+        endpoint.pathname = "/projects/schema/delete";
+        endpoint.searchParams.set('projectSlug', this.options.projectSlug);
+        endpoint.searchParams.set('schemaRef', schemaRef);
+
+        const headers = new Headers();
+        headers.set("X-Inkly-Auth-Token", this.options.authToken);
+
+        const endpointResponse = await fetch(endpoint.href, {
+            headers,
+            method: 'DELETE'
+        });
+
+        if (!endpointResponse.ok) throw new InklyError("Failed to delete schema", {
+            reason: await endpointResponse.text().catch(()=>null) ?? endpointResponse.statusText
+        });
+
+        return await endpointResponse.json().catch(async e => {
+            throw new InklyError("Failed to delete schema", {
+                reason: `Response was not understood. ${endpointResponse.bodyUsed ? '' : await endpointResponse.text()}`,
+                cause: e
+            });
+        }) as {count:number};
     }
 
     async deleteById(schemaId:string){
