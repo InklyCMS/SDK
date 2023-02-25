@@ -56,6 +56,7 @@ export type InklySchemaField = {
 	persistent?: boolean,
 	unique?: boolean,
 	size?: number,
+	tag?: string,
 	calculateOnEvent?: Partial<{
 		onUpdate: string,
 		onCreate: string
