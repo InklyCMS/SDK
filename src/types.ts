@@ -1,3 +1,4 @@
+import {z} from "zod";
 
 export type InklyAuthResponse = {
 	allow: boolean,
@@ -49,19 +50,27 @@ export type InklyAccessDetails = {
 	}>
 }
 
-export type InklySchemaField = {
-	label: string,
-	type: "shortText" | "longText" | "dateTime" | "number" | "boolean" | "reference" | "asset",
-	readonly?: boolean,
-	persistent?: boolean,
-	unique?: boolean,
-	size?: number,
-	tag?: string,
-	calculateOnEvent?: Partial<{
-		onUpdate: string,
-		onCreate: string
-	}>
-}
+export const InklySchemaFieldDefinition = z.object({
+	label: z.string(),
+	type: z.enum(["shortText", "longText", "dateTime", "number", "boolean", "reference", "asset"]),
+
+	attributes: z.object({
+		readonly: z.boolean().optional(),
+		persistent: z.boolean().optional(),
+		unique: z.boolean().optional(),
+	}).optional(),
+
+	tag: z.string().optional(),
+	size: z.number().optional(),
+
+	calculateOnEvent: z.object({
+		onUpdate: z.string(),
+		onCreate: z.string()
+	}).partial().optional()
+});
+
+export type InklySchemaField = z.infer<typeof InklySchemaFieldDefinition>
+
 
 export type InklySchema<T = any> = {
 	id: string,

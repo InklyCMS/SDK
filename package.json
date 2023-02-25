@@ -50,6 +50,7 @@
     "vitest": "^0.25.8"
   },
   "dependencies": {
-    "undici": "^5.14.0"
+    "undici": "^5.14.0",
+    "zod": "^3.20.6"
   }
 }
