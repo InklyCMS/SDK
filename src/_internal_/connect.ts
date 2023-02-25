@@ -1,4 +1,4 @@
-import type { InklyAccessDetails, IInklyFetcher, InklyWhere } from "../types";
+import type {InklyAccessDetails, IInklyFetcher, InklyWhere, InklySchemaField} from "../types";
 import { InklyError } from "./error";
 import { op, serializeWhereCondition } from "./synt/condition";
 import { INKLY_ENDPOINT } from "./utils/defaults";
@@ -273,6 +273,7 @@ export class InklySchemaManager {
             });
         }) as InklySchema;
     }
+
     async update(schemaId:string, updatedSchema:Partial<InklySchema>){
         const endpoint = parseUrl(this.options.endpoint ?? INKLY_ENDPOINT);
         endpoint.pathname = "/projects/schema/update";
@@ -295,6 +296,61 @@ export class InklySchemaManager {
 
         return await endpointResponse.json().catch(async e => {
             throw new InklyError("Failed to update schema", {
+                reason: `Response was not understood. ${endpointResponse.bodyUsed ? '' : await endpointResponse.text()}`,
+                cause: e
+            });
+        }) as InklySchema;
+    }
+
+    async deleteField(schemaId:string, fieldRef:string) {
+        const endpoint = parseUrl(this.options.endpoint ?? INKLY_ENDPOINT);
+        endpoint.pathname = "/projects/schema/deleteField";
+        endpoint.searchParams.set('projectSlug', this.options.projectSlug);
+        endpoint.searchParams.set('schemaId', schemaId);
+        endpoint.searchParams.set('fieldRef', fieldRef);
+
+        const headers = new Headers();
+        headers.set("X-Inkly-Auth-Token", this.options.authToken);
+
+        const endpointResponse = await fetch(endpoint.href, {
+            headers,
+            method: 'DELETE'
+        });
+
+        if (!endpointResponse.ok) throw new InklyError("Failed to delete field", {
+            reason: await endpointResponse.text().catch(()=>null) ?? endpointResponse.statusText
+        });
+
+        return await endpointResponse.json().catch(async e => {
+            throw new InklyError("Failed to delete field", {
+                reason: `Response was not understood. ${endpointResponse.bodyUsed ? '' : await endpointResponse.text()}`,
+                cause: e
+            });
+        }) as InklySchema;
+    }
+
+    async updateField(schemaId:string, fieldRef:string, field:InklySchemaField) {
+        const endpoint = parseUrl(this.options.endpoint ?? INKLY_ENDPOINT);
+        endpoint.pathname = "/projects/schema/updateField";
+        endpoint.searchParams.set('projectSlug', this.options.projectSlug);
+        endpoint.searchParams.set('schemaId', schemaId);
+        endpoint.searchParams.set('fieldRef', fieldRef);
+
+        const headers = new Headers();
+        headers.set("X-Inkly-Auth-Token", this.options.authToken);
+
+        const endpointResponse = await fetch(endpoint.href, {
+            headers,
+            method: 'PATCH',
+            body: JSON.stringify(field)
+        });
+
+        if (!endpointResponse.ok) throw new InklyError("Failed to update field", {
+            reason: await endpointResponse.text().catch(()=>null) ?? endpointResponse.statusText
+        });
+
+        return await endpointResponse.json().catch(async e => {
+            throw new InklyError("Failed to update field", {
                 reason: `Response was not understood. ${endpointResponse.bodyUsed ? '' : await endpointResponse.text()}`,
                 cause: e
             });
