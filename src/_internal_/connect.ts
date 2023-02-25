@@ -302,6 +302,35 @@ export class InklySchemaManager {
         }) as InklySchema;
     }
 
+    async createField(schemaId:string, fieldRef:string, field:InklySchemaField){
+        const endpoint = parseUrl(this.options.endpoint ?? INKLY_ENDPOINT);
+        endpoint.pathname = "/projects/schema/createField";
+        endpoint.searchParams.set('projectSlug', this.options.projectSlug);
+        endpoint.searchParams.set('schemaId', schemaId);
+        endpoint.searchParams.set('fieldRef', fieldRef);
+
+        const headers = new Headers();
+        headers.set("X-Inkly-Auth-Token", this.options.authToken);
+        headers.set("Content-Type", 'application/json');
+
+        const endpointResponse = await fetch(endpoint.href, {
+            headers,
+            method: 'POST',
+            body: JSON.stringify(field)
+        });
+
+        if (!endpointResponse.ok) throw new InklyError("Failed to create field", {
+            reason: await endpointResponse.text().catch(()=>null) ?? endpointResponse.statusText
+        });
+
+        return await endpointResponse.json().catch(async e => {
+            throw new InklyError("Failed to create field", {
+                reason: `Response was not understood. ${endpointResponse.bodyUsed ? '' : await endpointResponse.text()}`,
+                cause: e
+            });
+        }) as InklySchema;
+    }
+
     async deleteField(schemaId:string, fieldRef:string) {
         const endpoint = parseUrl(this.options.endpoint ?? INKLY_ENDPOINT);
         endpoint.pathname = "/projects/schema/deleteField";
@@ -338,6 +367,7 @@ export class InklySchemaManager {
 
         const headers = new Headers();
         headers.set("X-Inkly-Auth-Token", this.options.authToken);
+        headers.set("Content-Type", 'application/json');
 
         const endpointResponse = await fetch(endpoint.href, {
             headers,
