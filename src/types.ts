@@ -51,7 +51,7 @@ export type InklyAccessDetails = {
 
 export type InklySchemaField = {
 	label: string,
-	type: "shortText" | "longText" | "dateTime" | "number",
+	type: "shortText" | "longText" | "dateTime" | "number" | "boolean" | "reference" | "asset",
 	readonly?: boolean,
 	persistent?: boolean,
 	unique?: boolean,
