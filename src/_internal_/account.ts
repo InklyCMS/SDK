@@ -10,18 +10,18 @@ type InklyAccountActionOptions = {
 
 export class InklyAccount implements IInklyAccount {
 
-    id: string;
-    firstName: string;
+    id: string = "";
+    firstName: string = "";
     lastName?: string | undefined;
     email?: string | undefined;
-    username: string;
-    createdAt: Date;
+    username: string = "";
+    createdAt: Date = new Date();
     banned?: { until?: Date | undefined; reason: string; } | undefined;
-    accessibleProjects: { id: string; fullName: string; iconPath?: string | undefined; }[];
+    accessibleProjects: Array<{ id: string; fullName: string; iconPath?: string | undefined; }> = [];
 
     protected constructor(values:IInklyAccount){
         Object.entries(values).forEach(([k,v]) => {
-            this[k] = v;
+            this[k as keyof IInklyAccount] = v;
         });
     }
     

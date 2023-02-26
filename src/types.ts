@@ -113,8 +113,8 @@ export type InklyBucket = {
 export interface IInklyFetcher<T> {
     getAll(limit:number):Promise<Array<T>>
     getAllWhere(where:InklyWhere<T>, limit:number):Promise<Array<T>>
-    getFirstWhere(where:InklyWhere<T>):Promise<T>
-    getById(id:string):Promise<T>
+    getFirstWhere(where:InklyWhere<T>):Promise<T|undefined>
+    getById(id:string):Promise<T|undefined>
 }
 
 type InklyWhereCondition<T, VType = T[keyof Partial<T>]> = {

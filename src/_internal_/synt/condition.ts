@@ -37,14 +37,14 @@ function expandField<T, K extends InklyWhereObj<T>[keyof T]>(fieldName:string, f
         throw new Error("Unexpected field type. Got " + typeof fieldCondition._value);
     }
 
-    let v = typeof fieldCondition._value === "string" ? `"${encodeURIComponent(fieldCondition._value)}"` : encodeURIComponent(fieldCondition._value.toString());
+    let v = typeof fieldCondition._value === "string" ? `"${encodeURIComponent(fieldCondition._value)}"` : encodeURIComponent(String(fieldCondition._value));
 
     final.push(serializeOperator(fieldCondition._operator, fieldName, v));
 
     return final;
 }
 
-export function serializeWhereCondition<T extends object>(condition:InklyWhere<T>) {
+export function serializeWhereCondition<T extends object>(condition:InklyWhere<T>):string {
     
     if (Array.isArray(condition)){
         // multiple, so where must be an OR
@@ -134,7 +134,7 @@ export type DeserializedWhereCondition = {
 
 export type DeserializedWhereConditionCollection = Array<Array<DeserializedWhereCondition>>;
 
-export function deserializeWhereCondition(conditionString:string) {
+export function deserializeWhereCondition(conditionString:string): DeserializedWhereCondition[][]|undefined {
     if (conditionString === undefined || conditionString.trim().length === 0) return undefined;
 
     const getTyped = (c:string) => {
@@ -145,7 +145,7 @@ export function deserializeWhereCondition(conditionString:string) {
         else if (!isNaN(value as any)) value = `number(${value})`;
         return value;
     }
-    const condition = (left, right, operation) => {
+    const condition = (left:string, right:string, operation:string) => {
         return {
             operation,
             left: getTyped(left),
@@ -155,7 +155,7 @@ export function deserializeWhereCondition(conditionString:string) {
 
     const Ors:Array<Array<DeserializedWhereCondition>> = [];
 
-    const getStatements = (sentence:string)=>{
+    const getStatements = (sentence:string):Array<string> => {
         const walker = new StringWalker(sentence);
         const s = [];
 

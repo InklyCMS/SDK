@@ -1,6 +1,6 @@
 
 
 export class InklyProject {
-    id: string;
-    slug: string;
+    id: string = "";
+    slug: string = "";
 }

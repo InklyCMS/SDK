@@ -9,7 +9,7 @@ export class InklyError extends Error {
         this.name = this.constructor.name;
         this.reason = meta?.reason;
         this.cause = meta?.cause;
-        Error.captureStackTrace(this, this.constructor);
+        if ('captureStackTrace' in Error) Error.captureStackTrace(this, this.constructor);
     }
 
     static elaborate(error:InklyError|Error){
@@ -22,13 +22,13 @@ export class InklyError extends Error {
             catch(e) { return text }
         }
 
-        if (error instanceof InklyError){
+        if (error instanceof InklyError && !!error.reason){
             return `${error.message}: \n${tryParseMessage(error.reason)}`
         }
         if (error instanceof Error){
             if ("cause" in error){
                 let errorCause = error.cause as Error;
-                return `${error.message}: ${"message" in errorCause ? tryParseMessage(errorCause.message) : error.cause.toString()}`
+                return `${error.message}: ${"message" in errorCause ? tryParseMessage(errorCause.message) : (errorCause as Error).toString()}`
             }
             return tryParseMessage(error.message);
         }

@@ -63,7 +63,7 @@ export class InklyConnection {
         return new InklyContentFetcher<ContentModel<T>>(collectionName, this.options);
     }
 
-    assets<T extends any>(bucketName:string): InklyAssetFetcher<AssetModel<T>> {
+    assets<T extends {} = any>(bucketName:string): InklyAssetFetcher<AssetModel<T>> {
         return new InklyAssetFetcher<AssetModel<T>>(bucketName, this.options);
     }
 
@@ -437,12 +437,12 @@ export class InklyContentFetcher<T extends ContentModel> implements IInklyFetche
         }) as T[];
     }
 
-    async getFirstWhere(condition: InklyWhere<T>): Promise<T> {
+    async getFirstWhere(condition: InklyWhere<T>): Promise<T|undefined> {
         let result = await this.getAllWhere(condition, 1);
         return result?.at(0);
     }
     
-    async getById(id: string): Promise<T> {
+    async getById(id: string): Promise<T|undefined> {
         let result = await this.getAllWhere({
             id: op.equals(id)
         } as any, 1);
@@ -498,12 +498,12 @@ export class InklyAssetFetcher<T extends AssetModel> implements IInklyFetcher<T>
         }) as T[];
     }
 
-    async getFirstWhere(condition: InklyWhere<T>): Promise<T> {
+    async getFirstWhere(condition: InklyWhere<T>): Promise<T|undefined> {
         let result = await this.getAllWhere(condition, 1);
         return result?.at(0);
     }
     
-    async getById(id: string): Promise<T> {
+    async getById(id: string): Promise<T|undefined> {
         let result = await this.getAllWhere({
             id: op.equals(id)
         } as any, 1);
@@ -523,7 +523,7 @@ export class InklyAssetFetcher<T extends AssetModel> implements IInklyFetcher<T>
         return endpoint
     }
 
-    async getStream(idOrAsset:string|T):Promise<ReadableStream>{
+    async getStream(idOrAsset:string|T):Promise<ReadableStream|null>{
         let resourceLink = await this.getAssetUrl(idOrAsset);
         let response = await fetch(resourceLink);
         return response.body;
